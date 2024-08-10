@@ -6,21 +6,25 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public Rigidbody Player;
-    private float PlayerSpeed = 1000f; 
-    private float SideForce = 600f;
+    private float PlayerSpeed = 3000f; 
+    private float SideForce = 1800f;
 
     void FixedUpdate()
     {
         var x = Input.GetAxis("Horizontal");
-        var y = Input.GetAxis("Vertical");
 
-        Player.velocity =  new Vector3(x * (SideForce * Time.deltaTime), y, PlayerSpeed * Time.deltaTime);
+        Player.velocity =  new Vector3(x * (SideForce * Time.deltaTime), -2f, PlayerSpeed * Time.deltaTime);
+
+        if(Player.position.y < -1f) {
+            FindObjectOfType<GameManager>().GameOver();
+        }
     }
 
     void OnCollisionEnter(Collision other)
     {
         if(other.collider.tag == "Obstacle") {
-            this.enabled = false;
+            enabled = false;
+            FindObjectOfType<GameManager>().GameOver();
         }
     }
 }
